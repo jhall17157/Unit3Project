@@ -19,23 +19,23 @@ public class CheckIn {
         lostCar.setCarId(4);
 
 
-        firstCar.setCheckIn(firstCar.checkIn());
-        secondCar.setCheckIn(secondCar.checkIn());
-        lostCar.setCheckIn(lostCar.checkIn());
+        firstCar.setCheckIn();
+        secondCar.setCheckIn();
+        lostCar.setCheckIn();
 
-        firstCar.setCheckOut(firstCar.checkOut());
-        secondCar.setCheckOut(secondCar.checkOut());
+        firstCar.setCheckOut();
+        secondCar.setCheckOut();
 
 
 
-        fw.write(firstCar.getCarId() + "," + firstCar.getCheckIn() + "," + firstCar.getCheckOut());
-        fw.newLine();
-        fw.write(secondCar.getCarId() + "," + secondCar.getCheckIn() + "," + secondCar.getCheckOut());
-        fw.newLine();
-        fw.write(specialCar.getCarId() + "," + specialCar.getCheckIn() + "," + specialCar.getCheckOut());
-        fw.newLine();
-        fw.write(lostCar.getCarId() + "," + lostCar.getCheckIn() + "," + lostCar.getCheckOut());
-        fw.newLine();
+//        fw.write(firstCar.getCarId() + "," + firstCar.getCheckIn() + "," + firstCar.getCheckOut());
+//        fw.newLine();
+//        fw.write(secondCar.getCarId() + "," + secondCar.getCheckIn() + "," + secondCar.getCheckOut());
+//        fw.newLine();
+//        fw.write(specialCar.getCarId() + "," + specialCar.getCheckIn() + "," + specialCar.getCheckOut());
+//        fw.newLine();
+//        fw.write(lostCar.getCarId() + "," + lostCar.getCheckIn() + "," + lostCar.getCheckOut());
+//        fw.newLine();
         //Actual Machine
 
         Garage garage = new Garage();
@@ -54,36 +54,37 @@ public class CheckIn {
             System.out.println("Enter a valid choice");
             choice = keyboard.nextLine();
         }
+        TicketStrategy customerTicket = TicketStrategyFactoryImp.INSTANCE.getTicketStrategy(choice);
         if (choice.equals("1")) {
             //Enter the ticketing information
-            Ticket customerTicket = new Ticket();
+
             int customerId = garage.getLength() + 1;
             System.out.println("Car ID: " + customerId);
-            customerTicket.setCheckIn(customerTicket.checkIn());
+            customerTicket.setCheckIn();
 
             LocalTime customerTime = customerTicket.getCheckIn();
             System.out.println("Check In Time: " + customerTime);
-            fw.write(customerId + "," + customerTicket.getCheckIn() + "," + null);
-            fw.newLine();
+//            fw.write(customerId + "," + customerTicket.getCheckIn() + "," + null);
+//            fw.newLine();
 
         } else if (choice.equals("2")){
-            SpecialTicket sp = new SpecialTicket();
+
             int customerId = garage.getLength() + 1;
             System.out.println("Car ID: " + customerId);
             System.out.println("Receipt for vehicle" + customerId);
             System.out.println("Special Event");
-            double total = sp.charge(20);
+            double total = customerTicket.charge();
             System.out.println("$" + total);
-            garage.addTicket(sp);
-            fw.write(sp.getCarId() + "," + null + "," + null);
-        }else {
+            garage.addTicket(customerTicket);
+//            fw.write(sp.getCarId() + "," + null + "," + null);
+        }else if (choice.equals("3")) {
             //close the garage
             int total = 0;
             int regularCount = 0;
             int specialCount = 0;
             int lostCount = 0;
             for (int i = 0; i < garage.getLength(); i++) {
-                Ticket closeTicket = garage.getTicket(i);
+                TicketStrategy closeTicket = garage.getTicket(i);
                 if (closeTicket.getCheckIn() == null) {
                     specialCount ++;
                     total += 20;
@@ -92,8 +93,8 @@ public class CheckIn {
                     lostCount ++;
                 }else
                 {
-                    int diffTime = closeTicket.diffOfHours(closeTicket.getCheckIn(), closeTicket.getCheckOut());
-                    total += garage.getMoney(diffTime);
+                    total += closeTicket.charge();
+
                     regularCount ++;
                 }
             }

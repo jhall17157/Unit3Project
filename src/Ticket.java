@@ -1,8 +1,5 @@
 
-import java.time.LocalDate;
 import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalField;
 import java.util.Random;
 
 
@@ -21,26 +18,6 @@ public class Ticket {
         this.checkOut = checkOut;
     }
 
-    public LocalTime getCheckOut() {
-        return checkOut;
-    }
-
-    public void setCheckOut(LocalTime checkOut) {
-        this.checkOut = checkOut;
-    }
-
-    public Ticket(LocalTime checkIn, int carId) {
-        this.checkIn = checkIn;
-        this.carId = carId;
-    }
-
-    public void setCheckIn(LocalTime checkIn) {
-
-        this.checkIn = checkIn;
-    }
-    public LocalTime getCheckIn() {
-        return checkIn;
-    }
 
     public int getCarId() {
         return carId;
@@ -61,13 +38,10 @@ public class Ticket {
 
         return checkOut = LocalTime.of(hour,0);
     }
-    public int diffOfHours(LocalTime checkIn, LocalTime checkOut) {
+    public int diffOfHours() {
         int checkInHours = checkIn.getHour();
         int checkOutHours = checkOut.getHour();
         return checkOutHours - checkInHours;
-    }
-    public String toString(Ticket ticket) {
-        return ticket.getCarId() + "," + ticket.getCheckIn() + "," + ticket.checkOut();
     }
 
 
